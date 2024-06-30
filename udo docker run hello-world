@@ -1,0 +1,21 @@
+[0;1;32m●[0m docker.service - Docker Application Container Engine
+     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Fri 2024-06-28 15:42:56 UTC; 5s ago
+TriggeredBy: [0;1;32m●[0m docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 40697 (dockerd)
+      Tasks: 8
+     Memory: 23.7M
+     CGroup: /system.slice/docker.service
+             └─40697 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+Jun 28 15:42:56 Server dockerd[40697]: time="2024-06-28T15:42:56.301266348Z" level=warning msg="Controller.NewNetwork host:" error="failed to create DOCKER-USER IPV6 chain: iptables failed: ip6tables --wait -t filter -N DOCKER-USER: ip6tables v1.8.4 (legacy): can't initialize ip6tables table `filter': Address family not supported by protocol\nPerhaps ip6tables or your kernel needs to be upgraded.\n (exit status 3)"
+Jun 28 15:42:56 Server dockerd[40697]: time="2024-06-28T15:42:56.321966010Z" level=info msg="failed to read ipv6 net.ipv6.conf.<bridge>.accept_ra" bridge=docker0 syspath=/proc/sys/net/ipv6/conf/docker0/accept_ra
+Jun 28 15:42:56 Server dockerd[40697]: time="2024-06-28T15:42:56.322016740Z" level=info msg="failed to read ipv6 net.ipv6.conf.<bridge>.accept_ra" bridge=docker0 syspath=/proc/sys/net/ipv6/conf/docker0/accept_ra
+Jun 28 15:42:56 Server dockerd[40697]: time="2024-06-28T15:42:56.378873363Z" level=warning msg="Controller.NewNetwork bridge:" error="failed to create DOCKER-USER IPV6 chain: iptables failed: ip6tables --wait -t filter -N DOCKER-USER: ip6tables v1.8.4 (legacy): can't initialize ip6tables table `filter': Address family not supported by protocol\nPerhaps ip6tables or your kernel needs to be upgraded.\n (exit status 3)"
+Jun 28 15:42:56 Server dockerd[40697]: time="2024-06-28T15:42:56.378953275Z" level=info msg="Loading containers: done."
+Jun 28 15:42:56 Server dockerd[40697]: time="2024-06-28T15:42:56.391938240Z" level=warning msg="WARNING: No swap limit support"
+Jun 28 15:42:56 Server dockerd[40697]: time="2024-06-28T15:42:56.391991326Z" level=info msg="Docker daemon" commit=e953d76 containerd-snapshotter=false storage-driver=overlay2 version=27.0.2
+Jun 28 15:42:56 Server dockerd[40697]: time="2024-06-28T15:42:56.392068517Z" level=info msg="Daemon has completed initialization"
+Jun 28 15:42:56 Server dockerd[40697]: time="2024-06-28T15:42:56.418892274Z" level=info msg="API listen on /run/docker.sock"
+Jun 28 15:42:56 Server systemd[1]: Started Docker Application Container Engine.
