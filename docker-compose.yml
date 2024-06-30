@@ -10,8 +10,6 @@ services:
     command: sh -c "gunicorn vunderkids.wsgi --bind 0.0.0.0:8000 & celery -A vunderkids worker --loglevel=info"
     volumes:
       - .:/code
-    env_file:
-      - .env
     depends_on:
       - redis
     ports:
@@ -29,9 +27,13 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./letsencrypt:/var/www/letsencrypt
+      - ./ssl:/etc/ssl/certs
     depends_on:
       - backend
       - frontend
