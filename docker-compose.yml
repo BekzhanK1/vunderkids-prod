@@ -10,6 +10,7 @@ services:
     command: sh -c "gunicorn vunderkids.wsgi --bind 0.0.0.0:8000 & celery -A vunderkids worker --loglevel=info"
     volumes:
       - .:/code
+      - sqlite_data:/code/db.sqlite3
     depends_on:
       - redis
     ports:
@@ -40,3 +41,4 @@ services:
 
 volumes:
   react_build:
+  sqlite_data:
