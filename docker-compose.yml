@@ -3,24 +3,40 @@ version: "3"
 services:
   redis:
     image: redis:alpine
+    volumes:
+      - redis_data:/data
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: vunderkids
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
   backend:
     build:
       context: ./vunderkids
-    command: sh -c "gunicorn vunderkids.wsgi --bind 0.0.0.0:8000 & celery -A vunderkids worker --loglevel=info"
+    command: sh -c "python manage.py migrate && gunicorn vunderkids.wsgi --bind 0.0.0.0:8000 & celery -A vunderkids worker --loglevel=info & celery -A vunderkids beat -l info"
     volumes:
       - .:/code
-      - sqlite_data:/code/db.sqlite3
     depends_on:
       - redis
+      - postgres
     ports:
       - "8000:8000"
+    environment:
+      DATABASE_URL: postgres://postgres:1234@postgres:5432/vunderkids
 
   frontend:
     build:
       context: ./vunderkids-v2.1/webproject
     volumes:
-      - react_build:/react/dist
+      # - react_build:/react/dist
+      - games_volume:/frontend/dist/games/
     ports:
       - "3000:3000"
 
@@ -35,10 +51,14 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./letsencrypt:/var/www/letsencrypt
       - ./ssl:/etc/ssl/certs
+      # - react_build:/usr/share/nginx/html/vunderkids
+      - games_volume:/usr/share/nginx/html/games/
     depends_on:
       - backend
       - frontend
 
 volumes:
   react_build:
-  sqlite_data:
+  redis_data:
+  postgres_data:
+  games_volume:
