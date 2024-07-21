@@ -24,25 +24,27 @@ jobs:
     - name: Ensure Backend Repo is on prod Branch
       run: |
         cd vunderkids
-        git fetch
+        git fetch origin
         if git show-ref --quiet refs/heads/prod; then
           git checkout prod
         else
           git checkout -b prod
         fi
-        git pull origin prod
+        git branch --set-upstream-to=origin/prod prod
+        git pull origin prod --allow-unrelated-histories
         cd ..
 
     - name: Ensure Frontend Repo is on prod Branch
       run: |
         cd vunderkids-v2.1
-        git fetch
+        git fetch origin
         if git show-ref --quiet refs/heads/prod; then
           git checkout prod
         else
           git checkout -b prod
         fi
-        git pull origin prod
+        git branch --set-upstream-to=origin/prod prod
+        git pull origin prod --allow-unrelated-histories
         cd ..
 
     - name: Set up Docker
