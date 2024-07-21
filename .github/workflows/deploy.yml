@@ -12,52 +12,49 @@ jobs:
     - name: Checkout Deployment Repo
       uses: actions/checkout@v4
       with:
-        ref: prod
-      - name: Checkout Deployment Repo
-        uses: actions/checkout@v4
-        with:
-          ref: prod
+        ref: master
 
-    - name: Clone Backend Repo
+    - name: Checkout Backend Repo
       run: |
-        rm -rf vunderkids
-        git clone --branch prod https://github.com/owner_username/vunderkids.git vunderkids
-
-    - name: Clone Frontend Repo
-      run: |
-        rm -rf vunderkids-v2.1
-        git clone --branch prod https://github.com/owner_username/vunderkids-v2.1.git vunderkids-v2.1
-      - name: Clone Backend Repo
-        run: |
-          rm -rf vunderkids
+        if [ -d "vunderkids" ]; then
+          cd vunderkids
+          git fetch
+          git checkout prod
+          git pull origin prod
+          cd ..
+        else
           git clone --branch prod https://github.com/BekzhanK1/vunderkids.git vunderkids
+        fi
 
-      - name: Clone Frontend Repo
-        run: |
-          rm -rf vunderkids-v2.1
+    - name: Checkout Frontend Repo
+      run: |
+        if [ -d "vunderkids-v2.1" ]; then
+          cd vunderkids-v2.1
+          git fetch
+          git checkout prod
+          git pull origin prod
+          cd ..
+        else
           git clone --branch prod https://github.com/talaboiling/vunderkids-v2.1.git vunderkids-v2.1
+        fi
 
-      - name: List Directories
-        run: |
-          ls -l
-          ls -l vunderkids
-          ls -l vunderkids-v2.1
+    - name: List Directories
+      run: |
+        ls -l
+        ls -l vunderkids
+        ls -l vunderkids-v2.1
 
-      - name: Set up Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-          
-      - name: Verify Docker Installation
-        run: |
-          docker --version
-          docker-compose --version
+    - name: Set up Docker
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+        
+    - name: Verify Docker Installation
+      run: |
+        docker --version
+        docker-compose --version
 
     - name: Run Docker Compose
       run: |
-        docker compose down
-        docker compose up --build
-      - name: Run Docker Compose
-        run: |
-          docker compose down || true  # Stop any running containers
-          docker compose up --build -d
+        docker-compose down || true  # Stop any running containers
+        docker-compose up --build -d
