@@ -14,29 +14,15 @@ jobs:
       with:
         ref: master
 
-    - name: Checkout Backend Repo
+    - name: Clone Backend Repo
       run: |
-        if [ -d "vunderkids" ]; then
-          cd vunderkids
-          git fetch
-          git checkout prod
-          git pull origin prod
-          cd ..
-        else
-          git clone --branch prod https://github.com/BekzhanK1/vunderkids.git vunderkids
-        fi
+        rm -rf vunderkids
+        git clone --branch prod https://github.com/BekzhanK1/vunderkids.git vunderkids
 
-    - name: Checkout Frontend Repo
+    - name: Clone Frontend Repo
       run: |
-        if [ -d "vunderkids-v2.1" ]; then
-          cd vunderkids-v2.1
-          git fetch
-          git checkout prod
-          git pull origin prod
-          cd ..
-        else
-          git clone --branch prod https://github.com/talaboiling/vunderkids-v2.1.git vunderkids-v2.1
-        fi
+        rm -rf vunderkids-v2.1
+        git clone --branch prod https://github.com/talaboiling/vunderkids-v2.1.git vunderkids-v2.1
 
     - name: List Directories
       run: |
