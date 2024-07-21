@@ -24,10 +24,15 @@ jobs:
         rm -rf vunderkids-v2.1
         git clone --branch prod https://github.com/talaboiling/vunderkids-v2.1.git vunderkids-v2.1
 
+    - name: Copy .env File
+      run: |
+        cp .env vunderkids/vunderkids/.env  # Assuming .env is in vunderkids-prod directory
+
     - name: List Directories
       run: |
         ls -l
         ls -l vunderkids
+        ls -l vunderkids/vunderkids
         ls -l vunderkids-v2.1
 
     - name: Set up Docker
