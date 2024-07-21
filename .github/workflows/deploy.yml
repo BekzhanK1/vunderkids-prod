@@ -50,12 +50,12 @@ jobs:
     #   run: |
     #     cp /home/vunderkids/vunderkids-prod/.env vunderkids/vunderkids/.env
 
-    - name: List Directories
-      run: |
-        ls -l
-        ls -l vunderkids
-        ls -l vunderkids/vunderkids
-        ls -l vunderkids-v2.1
+    # - name: List Directories
+    #   run: |
+    #     ls -l
+    #     ls -l vunderkids
+    #     ls -l vunderkids/vunderkids
+    #     ls -l vunderkids-v2.1
 
     - name: Set up Docker
       run: |
