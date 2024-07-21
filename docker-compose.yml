@@ -1,10 +1,21 @@
-version: "3"
-
 services:
   redis:
-    image: redis:alpine
+    build:
+      context: .  # Use the current directory as the build context
+      dockerfile: Dockerfile.redis  # Specify the Dockerfile for Redis
     volumes:
       - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
 
   postgres:
     image: postgres:13
@@ -20,12 +31,12 @@ services:
   backend:
     build:
       context: ./vunderkids
-    command: sh -c "python manage.py migrate && gunicorn vunderkids.wsgi --bind 0.0.0.0:8000 & celery -A vunderkids worker --loglevel=info & celery -A vunderkids beat -l info"
     volumes:
       - .:/code
     depends_on:
       - redis
       - postgres
+      - rabbitmq
     ports:
       - "8000:8000"
     environment:
@@ -35,7 +46,6 @@ services:
     build:
       context: ./vunderkids-v2.1/webproject
     volumes:
-      # - react_build:/react/dist
       - games_volume:/frontend/dist/games/
     ports:
       - "3000:3000"
@@ -51,14 +61,12 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./letsencrypt:/var/www/letsencrypt
       - ./ssl:/etc/ssl/certs
-      # - react_build:/usr/share/nginx/html/vunderkids
       - games_volume:/usr/share/nginx/html/games/
     depends_on:
       - backend
       - frontend
 
 volumes:
-  react_build:
   redis_data:
   postgres_data:
   games_volume:

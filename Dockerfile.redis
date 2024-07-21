@@ -1,0 +1,11 @@
+# Use the official Redis image as the base image
+FROM redis:alpine
+
+# Copy the custom entrypoint script into the container
+COPY redis-entrypoint.sh /usr/local/bin/redis-entrypoint.sh
+
+# Make the script executable
+RUN chmod +x /usr/local/bin/redis-entrypoint.sh
+
+# Set the custom entrypoint script as the entrypoint
+ENTRYPOINT ["/usr/local/bin/redis-entrypoint.sh"]
