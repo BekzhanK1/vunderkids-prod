@@ -69,5 +69,6 @@ jobs:
 
     - name: Run Docker Compose
       run: |
-        docker-compose down || true  # Stop any running containers
+        ls vunderkids
+        ls vunderkids-v2.1
         docker-compose up --build -d
