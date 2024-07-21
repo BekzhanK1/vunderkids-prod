@@ -9,13 +9,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout Deployment Repo
       uses: actions/checkout@v4
       with:
         ref: prod
 
-    - name: Pull latest code
-      run: git pull origin prod
+    - name: Clone Backend Repo
+      run: |
+        rm -rf vunderkids
+        git clone --branch prod https://github.com/owner_username/vunderkids.git vunderkids
+
+    - name: Clone Frontend Repo
+      run: |
+        rm -rf vunderkids-v2.1
+        git clone --branch prod https://github.com/owner_username/vunderkids-v2.1.git vunderkids-v2.1
 
     - name: Set up Docker
       run: |
