@@ -46,9 +46,9 @@ jobs:
           git clone --branch prod https://github.com/talaboiling/vunderkids-v2.1.git vunderkids-v2.1
         fi
 
-    - name: Copy .env File
-      run: |
-        cp /home/vunderkids/vunderkids-prod/.env vunderkids/vunderkids/.env
+    # - name: Copy .env File
+    #   run: |
+    #     cp /home/vunderkids/vunderkids-prod/.env vunderkids/vunderkids/.env
 
     - name: List Directories
       run: |
