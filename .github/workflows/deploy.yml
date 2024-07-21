@@ -25,7 +25,11 @@ jobs:
       run: |
         cd vunderkids
         git fetch
-        git checkout prod
+        if git show-ref --quiet refs/heads/prod; then
+          git checkout prod
+        else
+          git checkout -b prod
+        fi
         git pull origin prod
         cd ..
 
@@ -33,7 +37,11 @@ jobs:
       run: |
         cd vunderkids-v2.1
         git fetch
-        git checkout prod
+        if git show-ref --quiet refs/heads/prod; then
+          git checkout prod
+        else
+          git checkout -b prod
+        fi
         git pull origin prod
         cd ..
 
