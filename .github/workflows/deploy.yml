@@ -21,31 +21,21 @@ jobs:
     - name: Update Submodules
       run: git submodule update --init --recursive
 
-    - name: Clone or Update Frontend Repo
+    - name: Ensure Backend Repo is on prod Branch
       run: |
-        if [ -d "vunderkids-v2.1" ]; then
-          cd vunderkids-v2.1
-          git fetch
-          git checkout prod
-          git pull
-          cd ..
-        else
-          git clone --branch prod https://github.com/talaboiling/vunderkids-v2.1.git vunderkids-v2.1
-        fi
+        cd vunderkids
+        git fetch
+        git checkout prod
+        git pull origin prod
+        cd ..
 
-    - name: Ensure Directory Exists for .env File
-      run: mkdir -p vunderkids/vunderkids
-
-    - name: Copy .env File
-      run: cp .env vunderkids/vunderkids/.env
-
-    - name: List Directories
+    - name: Ensure Frontend Repo is on prod Branch
       run: |
-        ls -l
-        ls -l vunderkids
-        ls -l vunderkids/vunderkids
-        ls -l vunderkids-v2.1
-        ls -l vunderkids-v2.1/webproject
+        cd vunderkids-v2.1
+        git fetch
+        git checkout prod
+        git pull origin prod
+        cd ..
 
     - name: Set up Docker
       run: |
@@ -59,5 +49,5 @@ jobs:
 
     - name: Run Docker Compose
       run: |
-        docker-compose down || true  # Stop any running containers
+        docker-compose down || true
         docker-compose up --build -d
