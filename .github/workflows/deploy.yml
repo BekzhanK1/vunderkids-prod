@@ -18,6 +18,10 @@ jobs:
       run: |
         git config http.postBuffer 524288000
 
+    - name: Ensure Correct Working Directory
+      run: |
+        cd /home/vunderkids/vunderkids-prod
+
     - name: Clone or Update Backend Repo
       run: |
         if [ -d "vunderkids" ]; then
@@ -44,7 +48,7 @@ jobs:
 
     - name: Copy .env File
       run: |
-        cp .env vunderkids/vunderkids/.env
+        cp /home/vunderkids/vunderkids-prod/.env vunderkids/vunderkids/.env
 
     - name: List Directories
       run: |
