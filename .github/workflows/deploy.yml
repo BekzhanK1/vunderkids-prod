@@ -15,14 +15,10 @@ jobs:
         ref: master
 
     - name: Set git buffer
-      run: |
-        git config http.postBuffer 524288000
-
-    - name: Ensure Correct Working Directory
-      run: |
-        cd /home/vunderkids/vunderkids-prod
+      run: git config http.postBuffer 524288000
 
     - name: Clone or Update Backend Repo
+      working-directory: /home/vunderkids/vunderkids-prod
       run: |
         if [ -d "vunderkids" ]; then
           cd vunderkids
@@ -35,6 +31,7 @@ jobs:
         fi
 
     - name: Clone or Update Frontend Repo
+      working-directory: /home/vunderkids/vunderkids-prod
       run: |
         if [ -d "vunderkids-v2.1" ]; then
           cd vunderkids-v2.1
@@ -46,29 +43,37 @@ jobs:
           git clone --branch prod https://github.com/talaboiling/vunderkids-v2.1.git vunderkids-v2.1
         fi
 
-    # - name: Copy .env File
-    #   run: |
-    #     cp /home/vunderkids/vunderkids-prod/.env vunderkids/vunderkids/.env
+    - name: Ensure Directory Exists for .env File
+      working-directory: /home/vunderkids/vunderkids-prod
+      run: mkdir -p vunderkids/vunderkids
 
-    # - name: List Directories
-    #   run: |
-    #     ls -l
-    #     ls -l vunderkids
-    #     ls -l vunderkids/vunderkids
-    #     ls -l vunderkids-v2.1
+    - name: Copy .env File
+      working-directory: /home/vunderkids/vunderkids-prod
+      run: cp .env vunderkids/vunderkids/.env
+
+    - name: List Directories
+      working-directory: /home/vunderkids/vunderkids-prod
+      run: |
+        ls -l
+        ls -l vunderkids
+        ls -l vunderkids/vunderkids
+        ls -l vunderkids-v2.1
+        ls -l vunderkids-v2.1/webproject
 
     - name: Set up Docker
+      working-directory: /home/vunderkids/vunderkids-prod
       run: |
         sudo apt-get update
         sudo apt-get install -y docker-compose
         
     - name: Verify Docker Installation
+      working-directory: /home/vunderkids/vunderkids-prod
       run: |
         docker --version
         docker-compose --version
 
     - name: Run Docker Compose
+      working-directory: /home/vunderkids/vunderkids-prod
       run: |
-        ls vunderkids
-        ls vunderkids-v2.1
+        docker-compose down || true  # Stop any running containers
         docker-compose up --build -d
