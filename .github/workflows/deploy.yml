@@ -30,4 +30,6 @@ jobs:
         sudo apt-get install -y docker-compose
 
     - name: Run Docker Compose
-      run: docker-compose up --build -d
+      run: |
+        docker compose down
+        docker compose up --build
