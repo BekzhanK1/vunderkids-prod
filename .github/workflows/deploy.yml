@@ -14,6 +14,10 @@ jobs:
       with:
         ref: master
 
+    - name: Set git buffer
+      run: |
+        git config http.postBuffer 524288000
+
     - name: Clone Backend Repo
       run: |
         rm -rf vunderkids
