@@ -18,19 +18,29 @@ jobs:
       run: |
         git config http.postBuffer 524288000
 
-    - name: Clone Backend Repo
+    - name: Clone or Update Backend Repo
       run: |
-        cd vunderkids
-        git checkout prod
-        git pull
-        cd ..
+        if [ -d "vunderkids" ]; then
+          cd vunderkids
+          git fetch
+          git checkout prod
+          git pull
+          cd ..
+        else
+          git clone --branch prod https://github.com/BekzhanK1/vunderkids.git vunderkids
+        fi
 
-    - name: Clone Frontend Repo
+    - name: Clone or Update Frontend Repo
       run: |
-        cd vunderkids-v2.1
-        git checkout prod
-        git pull
-        cd ..
+        if [ -d "vunderkids-v2.1" ]; then
+          cd vunderkids-v2.1
+          git fetch
+          git checkout prod
+          git pull
+          cd ..
+        else
+          git clone --branch prod https://github.com/talaboiling/vunderkids-v2.1.git vunderkids-v2.1
+        fi
 
     - name: Copy .env File
       run: |
