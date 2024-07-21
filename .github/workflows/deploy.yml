@@ -6,30 +6,34 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Deployment Repo
-      uses: actions/checkout@v4
-      with:
-        ref: prod
+      - name: Checkout Deployment Repo
+        uses: actions/checkout@v4
+        with:
+          ref: prod
 
-    - name: Clone Backend Repo
-      run: |
-        rm -rf vunderkids
-        git clone --branch prod https://github.com/owner_username/vunderkids.git vunderkids
+      - name: Clone Backend Repo
+        run: |
+          rm -rf vunderkids
+          git clone --branch prod https://github.com/BekzhanK1/vunderkids.git vunderkids
 
-    - name: Clone Frontend Repo
-      run: |
-        rm -rf vunderkids-v2.1
-        git clone --branch prod https://github.com/owner_username/vunderkids-v2.1.git vunderkids-v2.1
+      - name: Clone Frontend Repo
+        run: |
+          rm -rf vunderkids-v2.1
+          git clone --branch prod https://github.com/BekzhanK1/vunderkids-v2.1.git vunderkids-v2.1
 
-    - name: Set up Docker
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
+      - name: List Directories
+        run: |
+          ls -l
+          ls -l vunderkids
+          ls -l vunderkids-v2.1
 
-    - name: Run Docker Compose
-      run: |
-        docker compose down
-        docker compose up --build
+      - name: Set up Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Run Docker Compose
+        run: docker-compose up --build -d
