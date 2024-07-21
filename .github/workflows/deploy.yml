@@ -20,17 +20,21 @@ jobs:
 
     - name: Clone Backend Repo
       run: |
-        rm -rf vunderkids
-        git clone --branch prod https://github.com/BekzhanK1/vunderkids.git vunderkids
+        cd vunderkids
+        git checkout prod
+        git pull
+        cd ..
 
     - name: Clone Frontend Repo
       run: |
-        rm -rf vunderkids-v2.1
-        git clone --branch prod https://github.com/talaboiling/vunderkids-v2.1.git vunderkids-v2.1
+        cd vunderkids-v2.1
+        git checkout prod
+        git pull
+        cd ..
 
     - name: Copy .env File
       run: |
-        cp .env vunderkids/vunderkids/.env  # Assuming .env is in vunderkids-prod directory
+        cp .env vunderkids/vunderkids/.env
 
     - name: List Directories
       run: |
