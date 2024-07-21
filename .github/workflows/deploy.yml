@@ -22,7 +22,7 @@ jobs:
       - name: Clone Frontend Repo
         run: |
           rm -rf vunderkids-v2.1
-          git clone --branch prod https://github.com/BekzhanK1/vunderkids-v2.1.git vunderkids-v2.1
+          git clone --branch prod https://github.com/talaboiling/vunderkids-v2.1.git vunderkids-v2.1
 
       - name: List Directories
         run: |
