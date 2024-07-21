@@ -1,3 +1,6 @@
 [submodule "vunderkids"]
 	path = vunderkids
 	url = https://github.com/BekzhanK1/vunderkids.git
+[submodule "vunderkids-v2.1"]
+	path = vunderkids-v2.1
+	url = https://github.com/talaboiling/vunderkids-v2.1.git
