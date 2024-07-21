@@ -1,0 +1,26 @@
+name: Deploy Services
+
+on:
+  repository_dispatch:
+    types: [backend-updated, frontend-updated]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: prod
+
+    - name: Pull latest code
+      run: git pull origin prod
+
+    - name: Set up Docker
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
+    - name: Run Docker Compose
+      run: docker-compose up --build -d
