@@ -8,11 +8,11 @@ services:
       - redis_data:/data
     ports:
       - "6379:6379"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -22,11 +22,11 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
 
   postgres:
     image: postgres:13
@@ -38,18 +38,17 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
 
   backend:
     build:
       context: ./vunderkids
     volumes:
       - .:/code
-      - celerybeat_data:/code/celerybeat-schedule
     depends_on:
       - redis
       - postgres
@@ -58,11 +57,11 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: postgres://postgres:1234@postgres:5432/vunderkids
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
 
   frontend:
     build:
@@ -71,11 +70,11 @@ services:
       - games_volume:/frontend/dist/games/
     ports:
       - "3000:3000"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
 
   nginx:
     image: nginx:latest
@@ -92,11 +91,11 @@ services:
     depends_on:
       - backend
       - frontend
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
 
   celery_worker:
     build:
@@ -112,18 +111,17 @@ services:
       - CELERY_RESULT_BACKEND=rpc://
       - DATABASE_URL=postgres://postgres:1234@postgres:5432/vunderkids
     command: celery -A vunderkids worker --loglevel=info
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
 
   celery_beat:
     build:
       context: ./vunderkids
     volumes:
       - .:/code
-      - celerybeat_data:/code/celerybeat-schedule
     depends_on:
       - redis
       - rabbitmq
@@ -135,38 +133,37 @@ services:
     command: >
       sh -c "rm -f /code/celerybeat-schedule/* &&
              celery -A vunderkids beat --loglevel=info"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
-    environment:
-      - discovery.type=single-node
-    ports:
-      - "9200:9200"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+  #   environment:
+  #     - discovery.type=single-node
+  #   ports:
+  #     - "9200:9200"
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.9.3
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:7.9.3
+  #   ports:
+  #     - "5601:5601"
+  #   depends_on:
+  #     - elasticsearch
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
 
 volumes:
   redis_data:
   postgres_data:
   games_volume:
-  celerybeat_data:
