@@ -1,8 +1,8 @@
 services:
   redis:
     build:
-      context: .  # Use the current directory as the build context
-      dockerfile: Dockerfile.redis  # Specify the Dockerfile for Redis
+      context: .
+      dockerfile: Dockerfile.redis
     volumes:
       - redis_data:/data
     ports:
@@ -33,6 +33,7 @@ services:
       context: ./vunderkids
     volumes:
       - .:/code
+      - celerybeat_data:/code/celerybeat-schedule
     depends_on:
       - redis
       - postgres
@@ -66,7 +67,41 @@ services:
       - backend
       - frontend
 
+  celery_worker:
+    build:
+      context: ./vunderkids
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+      - rabbitmq
+      - postgres
+    environment:
+      - CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
+      - CELERY_RESULT_BACKEND = 'rpc://'
+      - DATABASE_URL=postgres://postgres:1234@postgres:5432/vunderkids
+    command: celery -A vunderkids worker --loglevel=info
+
+  celery_beat:
+    build:
+      context: ./vunderkids
+    volumes:
+      - .:/code
+      - celerybeat_data:/code/celerybeat-schedule
+    depends_on:
+      - redis
+      - rabbitmq
+      - postgres
+    environment:
+      - CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
+      - CELERY_RESULT_BACKEND = 'rpc://'
+      - DATABASE_URL=postgres://postgres:1234@postgres:5432/vunderkids
+    command: >
+      sh -c "rm -f /code/celerybeat-schedule/* &&
+             celery -A vunderkids beat --loglevel=info"
+
 volumes:
   redis_data:
   postgres_data:
   games_volume:
+  celerybeat_data:
