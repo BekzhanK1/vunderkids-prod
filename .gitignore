@@ -1,2 +1,3 @@
 actions-runner/
 filebeat-7.9.3-linux-x86_64
+.env

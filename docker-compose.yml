@@ -88,6 +88,7 @@ services:
       - ./letsencrypt:/var/www/letsencrypt
       - ./ssl:/etc/ssl/certs
       - games_volume:/usr/share/nginx/html/games/
+      - ./vunderkids/staticfiles:/usr/share/nginx/html/static
     depends_on:
       - backend
       - frontend
