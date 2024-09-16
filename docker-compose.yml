@@ -30,9 +30,9 @@ services:
   postgres:
     image: postgres:13
     environment:
-      POSTGRES_DB: vunderkids
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
+      - POSTGRES_DB=vunderkids
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - /home/vunderkids/backup:/backup
@@ -49,6 +49,7 @@ services:
       context: ./vunderkids
     volumes:
       - .:/code
+      - ./logs:/code/logs  # Mount logs directory to host
     depends_on:
       - redis
       - postgres
